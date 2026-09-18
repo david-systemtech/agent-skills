@@ -46,6 +46,8 @@ ships the generic-human reference only.
 stdlib only. JSON to stdout. Exit 1 on flag, 0 clean, 2 on a missing file.
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import math
@@ -58,6 +60,11 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 from structure_scan import STOPWORDS as _STRUCTURE_STOPWORDS  # noqa: E402
+from _lang import (  # noqa: E402
+    is_probably_english,
+    paragraphs as _prose_paragraphs,
+    words,
+)
 
 
 REFERENCE_PATH = (
@@ -97,32 +104,12 @@ ROLE_CUES = {
 ROLE_RE = {k: re.compile(v, re.I) for k, v in ROLE_CUES.items()}
 
 
-def words(text: str) -> list[str]:
-    return re.findall(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?", text.lower())
-
-
 def content(text: str) -> list[str]:
     return [w for w in words(text) if len(w) > 3 and w not in SILHOUETTE_STOPWORDS]
 
 
-def strip_md(text: str) -> str:
-    text = re.sub(r"```[\s\S]*?```", "\n\n", text)
-    kept = []
-    for line in text.splitlines():
-        if re.match(r"\s{0,3}#{1,6}\s+", line):
-            kept.append("")  # drop heading text from the prose view
-            continue
-        line = re.sub(r"^\s*[-*+]\s+", "", line)
-        line = re.sub(r"^\s*\d+[.)]\s+", "", line)
-        line = re.sub(r"\*\*([^*]+)\*\*", r"\1", line)
-        kept.append(line)
-    return "\n".join(kept)
-
-
 def paragraphs(text: str) -> list[str]:
-    stripped = strip_md(text)
-    return [re.sub(r"\s+", " ", p).strip()
-            for p in re.split(r"\n\s*\n", stripped) if p.strip()]
+    return _prose_paragraphs(text, strip_bold=True)
 
 
 # ---------------- METRICS (verbatim from the validated prototype) ----------------
@@ -382,11 +369,17 @@ def main(argv: list[str]) -> int:
         if not path.exists():
             print(f"Missing file: {path}", file=sys.stderr)
             return 2
-        text = path.read_text()
+        text = path.read_text(errors="replace")
     else:
-        text = sys.stdin.read()
+        text = sys.stdin.buffer.read().decode("utf-8", errors="replace")
 
     result = scan(text, reference, args.genre)
+
+    if not result.get("flags") and not is_probably_english(text):
+        print(json.dumps({"non_english": True, "flags": [], "penalty": None}, indent=2))
+        print("note: input appears non-English; scanner declined (English-only).", file=sys.stderr)
+        return 0
+
     print(json.dumps(result, indent=2))
     is_flagged = bool(result.get("penalty") is not None
                       and result["penalty"] >= PENALTY_THRESHOLD)
