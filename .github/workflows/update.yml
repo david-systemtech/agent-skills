@@ -50,6 +50,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          sleep 100
+          sleep 40
           gh pr checks "$branch" || true
           gh pr close "$branch" --delete-branch
