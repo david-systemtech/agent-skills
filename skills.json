@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "skills": {
+    "unslop": {
+      "repo": "theclaymethod/unslop",
+      "path": ".",
+      "ref": "HEAD",
+      "sha": "17ed39c9d0b522f44190ff0c6233867eadee192a",
+      "license": "MIT",
+      "digest": "sha256:470c4511286cbc32b04b7d0071bcbd393e57735e443e904bc385590f3e7297cb",
+      "updated": "2026-09-18"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+name: Installers
+
+# Runs both installers for real on Linux, macOS and Windows, against this
+# checkout and a scratch home, whenever they change.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - install.sh
+      - install.ps1
+      - .github/workflows/installers.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install, re-run, refuse to clobber, back up
+        run: |
+          export AGENT_SKILLS_REPO="$GITHUB_WORKSPACE" AGENT_SKILLS_HOME="$RUNNER_TEMP/agents"
+          sh install.sh
+          ls "$AGENT_SKILLS_HOME"/skills/*/SKILL.md
+          sh install.sh
+
+          rm "$AGENT_SKILLS_HOME/skills"
+          mkdir -p "$AGENT_SKILLS_HOME/skills/mine"
+          touch "$AGENT_SKILLS_HOME/skills/mine/SKILL.md"
+          if sh install.sh; then echo "should have refused to replace real content"; exit 1; fi
+          sh install.sh --backup
+          ls "$AGENT_SKILLS_HOME"/skills/*/SKILL.md
+          ls "$AGENT_SKILLS_HOME"/skills.backup-*/mine/SKILL.md
+      - name: Hourly pull (launchd)
+        if: runner.os == 'macOS'
+        run: |
+          export AGENT_SKILLS_REPO="$GITHUB_WORKSPACE" AGENT_SKILLS_HOME="$RUNNER_TEMP/agents"
+          sh install.sh --schedule
+          launchctl print "gui/$(id -u)/dev.systemtech.agent-skills" | head -5
+
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh] # Windows PowerShell 5.1 and PowerShell 7
+    runs-on: windows-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install, re-run, refuse to clobber, back up
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:AGENT_SKILLS_REPO = $env:GITHUB_WORKSPACE
+          $env:AGENT_SKILLS_HOME = Join-Path $env:RUNNER_TEMP 'agents'
+          $skills = Join-Path $env:AGENT_SKILLS_HOME 'skills'
+          .\install.ps1
+          if (-not (Get-ChildItem "$skills\*\SKILL.md")) { throw 'no skills visible through the junction' }
+          if ((Get-Item $skills).LinkType -ne 'Junction') { throw 'not a junction' }
+          .\install.ps1
+
+          (Get-Item $skills).Delete()   # removes the junction, never its target
+          if (-not (Test-Path (Join-Path $env:AGENT_SKILLS_HOME 'skills-repo\skills\*\SKILL.md'))) { throw 'deleting the junction reached into the clone' }
+          New-Item -ItemType Directory (Join-Path $skills 'mine') | Out-Null
+          Set-Content (Join-Path $skills 'mine\SKILL.md') 'x'
+          $refused = $false
+          try { .\install.ps1 } catch { $refused = $true; Write-Host "refused as expected: $_" }
+          if (-not $refused) { throw 'should have refused to replace real content' }
+          .\install.ps1 -Backup
+          if (-not (Get-ChildItem "$skills\*\SKILL.md")) { throw 'no skills after -Backup' }
+          if (-not (Test-Path "$env:AGENT_SKILLS_HOME\skills.backup-*\mine\SKILL.md")) { throw 'backup missing' }
+      - name: Hourly pull (scheduled task)
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:AGENT_SKILLS_REPO = $env:GITHUB_WORKSPACE
+          $env:AGENT_SKILLS_HOME = Join-Path $env:RUNNER_TEMP 'agents'
+          .\install.ps1 -Schedule
+          Start-ScheduledTask -TaskName 'Agent Skills Pull'
+          Start-Sleep -Seconds 20
+          $info = Get-ScheduledTaskInfo -TaskName 'Agent Skills Pull'
+          Write-Host "LastTaskResult=$($info.LastTaskResult) NextRunTime=$($info.NextRunTime)"
+          if ($info.LastTaskResult -ne 0) { throw "the pull task exited $($info.LastTaskResult)" }
+          if (-not $info.NextRunTime) { throw 'the task has no next run' }

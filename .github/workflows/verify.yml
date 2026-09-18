@@ -1,0 +1,19 @@
+name: Verify
+
+# Every vendored skill must match its recorded digest and its upstream commit.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 scripts/skills.py verify --fetch
