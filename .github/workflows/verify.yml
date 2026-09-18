@@ -1,11 +1,15 @@
 name: Verify
 
 # Every vendored skill must match its recorded digest and its upstream commit.
+#
+# Triggered by pushes to any branch, never by `pull_request`: a pull request
+# opened by the update job's Actions token would otherwise record a run that
+# fails before it starts, every week. A branch push checks a pull request's
+# commits just the same, and pushes made by that token start nothing.
 
 on:
   push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
