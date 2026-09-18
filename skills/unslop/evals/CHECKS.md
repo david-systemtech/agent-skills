@@ -1,223 +1,151 @@
 # Check Matrix
 
-`python3 evals/run_adversarial.py --list-gates` is the source of truth for the
-gate matrix. It emits machine-readable JSON with each gate's id, command,
-pass criterion, blocking status, and external needs.
+Run the repository checks with one command:
 
-Current gates:
+```bash
+python3 evals/check.py
+```
+
+That command runs the bounded core-contract lane: one core-outcome gate
+containing exactly five high-signal offline examples. They exercise the Luna
+runner interface, scorer, evidence rules, and acceptance gate without calling a
+model. This is engineering evidence, not proof of product quality.
+Generated-benchmark currency and strict leakage belong to the explicit
+integrity phases in the behavioral/full lanes, not the normal edit loop.
+
+Run the bounded deterministic safety and integrity lane explicitly when the
+scanner, preservation validator, runner, or benchmark plumbing changes:
+
+```bash
+python3 evals/check.py --maintenance
+```
+
+The core-contract lane is intentionally budgeted at five examples. New
+regression evidence belongs in the maintenance lane unless it changes one of
+those five interfaces.
+
+Run the core-contract lane, bounded deterministic maintenance matrix, and behavioral
+integrity checks together before a release:
+
+```bash
+python3 evals/check.py --full
+```
+
+Use a slice only to diagnose a failure:
+
+```bash
+python3 evals/run_adversarial.py --only PREFIX
+python3 evals/run_adversarial.py --case ID
+```
+
+The runner treats manifest rows as evidence inside three deterministic gates.
+Scanner and preservation examples live in compact contract tables and run once
+each. The expanded deterministic surface is still counted: the repository
+fails if it exceeds 80 executable examples or 400 expanded outcome predicates,
+or if a nested contract
+wrapper hides another matrix. Use the explicit lane commands when you want the
+product or maintenance scope:
+
+```bash
+python3 evals/run_adversarial.py --lane core-contract
+python3 evals/run_adversarial.py --lane maintenance
+```
+
+Voice imitation, calibration, contribution tooling, and other authoring tools
+are separate engineering-health scoreboards. They do not establish core
+detection or repair quality and are not counted as product evidence. Run the
+relevant scoreboard when that tool changes:
+
+```bash
+python3 evals/check_mimic.py --all
+python3 evals/check_voice.py --all
+python3 evals/check_climb.py --all
+python3 evals/check_contrib.py --all
+```
+
+The `--group` form remains available for diagnosing one gate. `--only PREFIX`
+and `--case ID` are diagnostic slices and do not enforce the product budget or
+strict XFAIL set.
+
+Script rows that mutate shared repository fixtures must declare
+`"serial": true`; the runner completes all such rows before starting its
+subprocess pool. `--eval-file PATH` supplies an isolated suite for runner
+integration tests.
+
+Behavioral checks are explicit and run after deterministic checks pass:
+
+```bash
+python3 evals/check.py --behavioral tune
+```
+
+The holdback split remains sealed unless
+`UNSLOP_CONFIRM_HOLDBACK=1` is set.
+
+`python3 evals/run_adversarial.py --list-gates` is the machine-readable
+external gate surface:
 
 ```json
 [
   {
-    "id": "adversarial-suite",
-    "command": "python3 evals/run_adversarial.py",
+    "id": "core-outcome",
+    "command": "python3 evals/run_adversarial.py --group core-outcome",
     "pass_criterion": "exit 0",
     "blocking": true,
-    "needs": []
+    "needs": [],
+    "lane": "core-contract",
+    "budget": {
+      "max_examples": 5
+    }
   },
   {
-    "id": "harvest-suite",
-    "command": "python3 evals/run_adversarial.py --only HARV",
+    "id": "deterministic-safety",
+    "command": "python3 evals/run_adversarial.py --group deterministic-safety",
     "pass_criterion": "exit 0",
     "blocking": true,
-    "needs": []
+    "needs": [],
+    "lane": "maintenance",
+    "budget": {
+      "max_examples": null
+    }
   },
   {
-    "id": "contribute-suite",
-    "command": "python3 evals/run_adversarial.py --only CONTRIB",
+    "id": "integrity-and-tools",
+    "command": "python3 evals/run_adversarial.py --group integrity-and-tools",
     "pass_criterion": "exit 0",
     "blocking": true,
-    "needs": []
+    "needs": [],
+    "lane": "maintenance",
+    "budget": {
+      "max_examples": null
+    }
   },
   {
-    "id": "calibrate-suite",
-    "command": "python3 evals/run_adversarial.py --only CAL",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "shared-benchmark-check",
-    "command": "python3 evals/build_shared_benchmark.py --check",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "strict-leakage-validate",
-    "command": "skill-benchmark validate evals/shared-benchmark.json --strict-leakage",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": [
-      "skill-benchmark"
-    ]
-  },
-  {
-    "id": "taboo-catalog-parity",
-    "command": "python3 evals/check_taboo_parity.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "pattern-coverage",
-    "command": "python3 evals/check_pattern_coverage.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "voice-scorer",
-    "command": "python3 evals/check_voice.py --separation && python3 evals/check_voice.py --gi && python3 evals/check_voice.py --gaming && python3 evals/check_voice.py --profiles",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "add-pattern-kata",
-    "command": "python3 evals/kata_add_pattern.py --run",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "command-router-parity",
-    "command": "python3 evals/check_commands.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "seeded-docs",
-    "command": "python3 evals/check_seeded_docs.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "paired-fixture-hygiene",
-    "command": "python3 evals/check_pairs.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "mimic-logic",
-    "command": "python3 evals/run_adversarial.py --only MIMIC --only CARD",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "pack-structure",
-    "command": "python3 scripts/check_packs.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "behavioral-tune",
-    "command": "evals/run_behavioral.sh tune",
+    "id": "behavioral",
+    "command": "python3 evals/check.py --behavioral tune",
     "pass_criterion": "exit 0",
     "blocking": false,
     "needs": [
       "skill-benchmark",
-      "claude -p"
-    ]
-  },
-  {
-    "id": "banned-phrase-scan",
-    "command": "python3 scripts/banned_phrase_scan.py < transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "structure-scan",
-    "command": "python3 scripts/structure_scan.py < transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "silhouette-scan",
-    "command": "python3 scripts/silhouette_scan.py < transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "silhouette-check",
-    "command": "python3 evals/check_silhouette.py",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "validate-preservation",
-    "command": "python3 scripts/validate_preservation.py original.txt transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "readability-metrics",
-    "command": "python3 scripts/readability_metrics.py < transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "diff-check",
-    "command": "python3 scripts/diff_check.py original.txt transformed.txt",
-    "pass_criterion": "exit 0",
-    "blocking": true,
-    "needs": []
-  },
-  {
-    "id": "rubric-judge",
-    "command": "Judge transformed output against the skill rubric",
-    "pass_criterion": "non-deterministic rubric pass",
-    "blocking": false,
-    "needs": [
-      "rubric judge"
-    ]
+      "codex exec (gpt-5.6-luna)"
+    ],
+    "lane": "behavioral",
+    "budget": {
+      "max_examples": null
+    }
   }
 ]
 ```
 
-## Parallel Check Protocol
-
-Each deterministic gate is independent and exits 0 or 1, so the checks are safe
-to hand to separate small-context sub-agents. Category slices can run
-concurrently with `python3 evals/run_adversarial.py --only PREFIX`; use that for
-scanner, preservation, robustness, documentation, and recall audits.
-
-Two gates are non-deterministic because they call an LLM judge: the behavioral
-split (`behavioral-tune`) and the per-rewrite rubric score (`rubric-judge`).
-Run them last, after every deterministic gate passes — the behavioral split via
-`evals/run_behavioral.sh tune`.
-
-The JSON matrix above must stay byte-equal to `--list-gates` output; DOC-03
-enforces this, so update both together.
-
 ## Writing a New Check
 
-New `evals/check_*.py` scripts pull `ROOT` and the shared helpers from
-`evals/_check_support.py`. Skip that. Two patterns disappear once you import
-from `_check_support` instead of writing your own copy by hand: a private
-`ROOT = Path(__file__).resolve().parent.parent` line, and a local subprocess
-`run()` wrapper that quietly drifts from the one every other check already
-trusts. Here is the seam.
+A new `evals/check_*.py` script must use the shared import seam:
 
 ```python
 from _check_support import ROOT, run, load_evals  # noqa: E402
-sys.path.insert(0, str(ROOT))          # only when importing scripts.* directly
-from scripts.banned_phrase_scan import scan_for_violations  # noqa: E402
 ```
 
-`run()` shells out. `load_evals()` loads rows. Exit 0. Exit 1 on a finding.
-Exit 2 means setup broke — a missing fixture, a bad flag, something the
-caller needs to fix before the check can even run its assertions. Wire the
-check into the gate list in `run_adversarial.py`, then refresh the matrix
-pinned near the top of this file.
+Import scanner APIs only after adding `ROOT` to `sys.path`. Exit 0 on pass,
+1 on a finding, and 2 when setup is broken. Add the check as an adversarial
+script row so the full suite remains the single source of deterministic
+coverage. Add a top-level gate only when the check cannot run inside the
+adversarial suite.
