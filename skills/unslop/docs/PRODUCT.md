@@ -88,15 +88,8 @@ Tiering is measured, not assumed; `evals/run_model_parity.py` re-measures it and
   preservation gate.
 - Full rewrites of register-sensitive text erode hedges, absolutes, and legal negations
   on cheap tiers. That work belongs to frontier models, re-scanned afterward.
-- Macro structure defeated every model tested in a single pass. No model self-checks document
-  shape from prose instructions; structure is always machine-detected and machine-gated. It is
-  also machine-*correctable*: fed the scanners' findings as targeted directives in a
-  scan-regenerate loop (`evals/run_structure_climb.py`), both frontier tiers converge to clean
-  fast. Whether a cheap model converges is model-dependent, not a property of "cheap" in
-  general: Anthropic's cheap tier (haiku-4-5) converges given a slightly larger round cap;
-  OpenAI's cheap tier (gpt-5.4-mini) did not converge even at double the round budget in the
-  measured run. A preservation guard means climbing never eats a fact either way
-  (`references/pipeline.md`, "Macro structure under the climb").
+- Macro structure defeated every model tested. No model self-checks document shape from
+  prose instructions; structure is always machine-detected and machine-gated.
 
 Touching a model-dependent feature means re-running the parity evals across
 both the GPT and Anthropic spectrums.
@@ -107,4 +100,3 @@ Detection catalogs decay as generators evolve. Growth comes from adversarial ref
 live bench outputs supply fresh specimens, contribute turns each specimen into a
 red-first row, and coverage enforcement keeps every new pattern exercised. Yesterday's
 miss becomes tomorrow's regression test, and nothing relies on anyone's good habits.
-The agent-runnable procedure and its staleness signal live in `references/refresh.md`.

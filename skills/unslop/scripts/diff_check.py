@@ -13,8 +13,6 @@ Usage:
     python diff_check.py original.txt transformed.txt
 """
 
-from __future__ import annotations
-
 import sys
 import json
 import re

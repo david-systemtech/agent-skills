@@ -16,8 +16,6 @@ Checks:
   (e) each command file's first line is `# /unslop <cmd>`.
 """
 
-from __future__ import annotations
-
 import re
 import sys
 from pathlib import Path

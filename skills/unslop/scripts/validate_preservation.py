@@ -10,8 +10,6 @@ Usage:
     python validate_preservation.py original.txt transformed.txt constraints.json
 """
 
-from __future__ import annotations
-
 import sys
 import json
 import re

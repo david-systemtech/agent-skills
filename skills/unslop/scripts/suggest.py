@@ -35,8 +35,6 @@ Usage:
     python3 scripts/suggest.py document.md --apply-replacements replacements.json
 """
 
-from __future__ import annotations
-
 import argparse
 import json
 import re
@@ -181,9 +179,9 @@ def main(argv: list[str]) -> int:
         if not path.exists():
             print(f"Missing file: {path}", file=sys.stderr)
             return 2
-        text = path.read_text(errors="replace")
+        text = path.read_text()
     else:
-        text = sys.stdin.buffer.read().decode("utf-8", errors="replace")
+        text = sys.stdin.read()
 
     # English-only graceful decline, matching the two scanners.
     if not is_probably_english(text):

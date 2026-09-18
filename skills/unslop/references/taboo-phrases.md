@@ -384,43 +384,6 @@ limit: in plain text "standalone headline" can only be approximated as "a line w
 whole content is the short-sentence pair," so the tell is gated on frequency, not on
 proof that the line is a real heading.
 
-### Headings and Slide Titles
-
-Write the title after the slide or section has earned its point. A strong title
-names the test, mechanism, result, decision, or completion criterion the viewer
-should inspect.
-
-Prefer:
-
-- "The Week 1 capstone is a clean run with recorded agreement."
-- "Order, verbosity, and self-preference bias the judge."
-- "Each capstone must clear three gates."
-- "Can one packet reconstruct both products?"
-
-For a bad or conflicting evaluation, name the discrepancy or its human/system
-cause. Do not preserve tool agency by changing "the judge lies" into "the judge
-gives a false verdict"; for example, use "One response receives conflicting
-labels" when that is the supported claim.
-
-Rewrite:
-
-- Calendar or program containers delivering outcomes: "Week 1 ends with a
-  calibrated eval"; "Demo day closes the cohort."
-- Tools, scores, data, or packages given narrative or volitional agency: "Your
-  judge is lying"; "A score hides five failures"; "The package outlives the
-  cohort."
-- Abstract uplift transformations: "Taste becomes infrastructure"; "Unlocking
-  the power of clinical intelligence."
-- Generic handles that make the body do all the work: "Architecture", "Proof
-  plan", "Three pillars", "What the budget buys."
-- Repeated counting or journey frames that describe the deck instead of the
-  claim.
-
-This is a semantic rule, not a blanket subject-verb ban. "Examples calibrate the
-judge" and "The gate fails the build" describe mechanisms. "Week 1 ends on
-Friday" describes a literal boundary. The problem is category-error agency or a
-title that withholds the actual point.
-
 ---
 
 ## Significance & Legacy Inflation
@@ -761,26 +724,6 @@ without making the claim itself. (Signal adapted from `stop-slop`.)
 | "X paints a clear picture" | Inflated stand-in for "X shows" |
 
 **Fix**: State the figure and what it means. "Revenue doubled" beats "the numbers speak for themselves."
-
-### Tool Anthropomorphism
-
-A close cousin of false agency: marketing copy hands an inanimate tool or artifact
-volitional or cognitive agency — machinery personified. Two shapes, both soft.
-
-| Pattern | Why It's Bad |
-|---------|--------------|
-| Reflexive self-agency: "The suite defends itself." / "The rules update themselves." / "It graded its own reflection." | A tool acting on itself is personification; state what it does and to what |
-| Volitional verb on a standalone headline line: "The bench decides which model does which job." / "It hunts instances, not word lists." | A tool doesn't decide, hunt, want, or know; say what it does mechanically |
-
-The reflexive shape fires anywhere the tool-noun subject takes a reflexive object
-directly after the verb. The volitional shape (decides, hunts, wants, knows, believes,
-cares, refuses, judges, thinks) fires only when the whole line is the short sentence —
-the headline/slogan position. Ordinary technical register is spared: "the parser reads
-the file", "the model learns the distribution", "the gate fails the build", and the dev
-idiom "the test cleans up after itself" all stay clean, and human roles ("the judge
-decides the case") are not tool-nouns.
-
-**Fix**: Name the mechanism. "The bench routes each job to a model" beats "The bench decides which model does which job."
 
 ---
 
@@ -1128,21 +1071,8 @@ opener_repetition) as the lower fence.
 (?im)(?:^|[.!?]\s+)one\s+[^,.!?\n]{1,30},\s+(?:two|three|four|five|\d+)\s+[^,.!?\n]{1,30}[.!?]
 (?i)\b(?:loop|story|experience|magic|feedback|workflow)\s+ships?\s+(?:inside|within|with)\b|ships?\s+(?:inside|within)\s+(?:the|your|a|an)\b
 
-# Standalone slogan/spec fragment lines & headers (soft; whole-line only — embedded counts stay clean)
-# slogan_fragment: "N X, one Y." ("Four presets, one input.")
-(?:^|\n)[ \t]*(?:#{1,6}[ \t]*|>[ \t]*|[-*+][ \t]+)?(?:\*\*)?(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+[^,.!?\n]{1,40},\s+one\s+[^,.!?\n]{1,40}[.!?](?:\*\*)?[ \t]*(?=\n|$)
-# spec_fragment: "N noun-phrase, past-participle ..." ("Eight criteria, scored 1 to 5.")
-(?:^|\n)[ \t]*(?:#{1,6}[ \t]*|>[ \t]*|[-*+][ \t]+)?(?:\*\*)?(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+[^,.!?\n]{1,40},\s+(?:[a-z]+ed|built|written|drawn|made|split|set|done|shown|given|taken)\b[^.!?\n]{0,40}[.!?](?:\*\*)?[ \t]*(?=\n|$)
-
 # Headline slogan cadence (soft; DOCUMENT-LEVEL — fires only at 3+ line matches)
 (?i)(?:^|\n)[ \t]*(?:[a-z0-9][\w'-]*(?:[ ,]+[a-z0-9][\w'-]*){0,4}[.!?][ \t]+){1,3}[a-z0-9][\w'-]*(?:[ ,]+[a-z0-9][\w'-]*){0,4}[.!?][ \t]*(?=\n|$)
-
-# Tool anthropomorphism (soft)
-# tier A reflexive self-agency, fires anywhere; adjacency + "...out" lookahead spare "cleans up after itself" / "sorts itself out"
-(?i)\b(?:the|these|those|its)\s+(?:suite|scanner|gates?|tool|system|pipeline|bench|rules?|tests?|code|models?|loop|harness)\s+(?:\w+ly\s+)?\w+\s+(?:(?:itself|themselves)(?!\s+out\b)|its\s+own\s+\w+)
-(?i)(?:^|[.!?]\s+|\n)it\s+(?:\w+ly\s+)?\w+\s+(?:(?:itself|themselves)(?!\s+out\b)|its\s+own\s+\w+)
-# tier B strongly-volitional verb, standalone-line only (excludes reads/runs/checks/returns/learns)
-(?i)(?:^|\n)[ \t]*(?:#{1,6}[ \t]*|>[ \t]*|[-*+][ \t]+)?(?:\*\*)?(?:(?:the|its|this)\s+(?:suite|scanner|gates?|tool|system|pipeline|bench|rules?|tests?|code|models?|loop|harness)\s+|it\s+)(?:decide|hunt|want|know|believe|care|refuse|judge|think)(?:s|es|d|ed)?\b[^.!?\n]{0,55}[.!?](?:\*\*)?[ \t]*(?=\n|$)
 
 # False concession structures
 (?i)((while|although) .+?, .+? (remains|is still) .+?(challenge|concern|open question|limitation|constraint))

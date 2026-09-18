@@ -40,19 +40,16 @@ jobs:
           git add -A skills skills.json
           git commit --quiet -m "Update vendored skills"
           git push --quiet -u origin "$branch"
-          gh pr create --base main --head "$branch" \
-            --title "Update vendored skills ($(date -u +%Y-%m-%d))" \
+          gh pr create --base experiment --head "$branch" \
+            --title "Experiment: does a bot PR run Verify when its branch survives? (closed unmerged)" \
             --body-file "$RUNNER_TEMP/summary.md"
           echo "branch=$branch" >> "$GITHUB_ENV"
 
-      # The gate for merging unattended. Branch protection is not available to
-      # a private repo on the free plan, so the check runs here, before the merge.
-      - name: Verify against upstream
-        if: steps.update.outputs.changed == 'true'
-        run: python3 scripts/skills.py verify --fetch
-
-      - name: Merge
+      - name: Leave the branch alone and watch the PR's own checks
         if: steps.update.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh pr merge "$branch" --squash --delete-branch
+        run: |
+          sleep 100
+          gh pr checks "$branch" || true
+          gh pr close "$branch" --delete-branch
