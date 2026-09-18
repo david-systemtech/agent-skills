@@ -43,22 +43,17 @@
     "target": "vague_attribution",
     "kind": "phrase"
   },
+  "participial_closer": {
+    "target": "superficial_ing",
+    "kind": "phrase"
+  },
   "anti_slop_register": {
     "target": "anti_slop_register",
     "kind": "phrase"
   },
-  "constitutes_a": {
-    "target": "copula_avoidance",
+  "cliffhanger_fragment": {
+    "target": "rhetorical_question",
     "kind": "phrase"
-  },
-  "functions_as_a": {
-    "target": "copula_avoidance",
-    "kind": "phrase"
-  },
-  "harness_energy": {
-    "target": "jargon",
-    "kind": "phrase",
-    "exact_total": 1
   },
   "macro_coda": {
     "target": "conclusion_coda",

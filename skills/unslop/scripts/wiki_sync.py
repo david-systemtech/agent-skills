@@ -17,9 +17,6 @@ Usage:
     python wiki_sync.py prompt | claude -p --allowedTools Edit,Read,Grep,Glob,Bash
 """
 
-from __future__ import annotations
-
-import argparse
 import hashlib
 import json
 import re
@@ -86,19 +83,6 @@ def fetch_latest_revision() -> tuple[int, str, str]:
     timestamp = revision["timestamp"]
     content = revision["slots"]["main"]["content"]
     return rev_id, timestamp, content
-
-
-def get_wikitext(from_file: str | None) -> tuple[int, str, str]:
-    """Return (revision_id, timestamp, wikitext).
-
-    With `from_file` set, read wikitext from that local path instead of
-    hitting the network — used for offline eval/fixture runs. There is no
-    real revision for a local file, so revision_id/timestamp are placeholders.
-    """
-    if from_file:
-        content = Path(from_file).read_text(encoding="utf-8")
-        return 0, "from-file", content
-    return fetch_latest_revision()
 
 
 def load_state() -> SyncState | None:
@@ -370,9 +354,9 @@ def generate_prompt(changes: list[Change], sections: list[ParsedSection]) -> str
     return "\n".join(lines)
 
 
-def cmd_check(from_file: str | None = None) -> None:
+def cmd_check() -> None:
     """Check for updates. Exit 0 = no updates, 1 = updates available."""
-    rev_id, timestamp, content = get_wikitext(from_file)
+    rev_id, timestamp, content = fetch_latest_revision()
     state = load_state()
 
     content_hash = hashlib.sha256(content.encode()).hexdigest()
@@ -393,9 +377,9 @@ def cmd_check(from_file: str | None = None) -> None:
     sys.exit(1)
 
 
-def cmd_diff(from_file: str | None = None) -> None:
+def cmd_diff() -> None:
     """Output structured JSON diff of changes."""
-    rev_id, timestamp, content = get_wikitext(from_file)
+    rev_id, timestamp, content = fetch_latest_revision()
     state = load_state()
 
     new_sections = parse_wikitext(content)
@@ -416,13 +400,12 @@ def cmd_diff(from_file: str | None = None) -> None:
     }
 
     print(json.dumps(output, indent=2))
-    if not from_file:
-        save_state(rev_id, timestamp, content)
+    save_state(rev_id, timestamp, content)
 
 
-def cmd_prompt(from_file: str | None = None) -> None:
+def cmd_prompt() -> None:
     """Output a Claude Code integration prompt."""
-    rev_id, timestamp, content = get_wikitext(from_file)
+    rev_id, timestamp, content = fetch_latest_revision()
     state = load_state()
 
     new_sections = parse_wikitext(content)
@@ -436,43 +419,27 @@ def cmd_prompt(from_file: str | None = None) -> None:
     prompt = generate_prompt(changes, new_sections)
 
     print(prompt)
-    if not from_file:
-        save_state(rev_id, timestamp, content)
+    save_state(rev_id, timestamp, content)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Sync unslop rules with Wikipedia's 'Signs of AI writing' page."
-    )
-    subparsers = parser.add_subparsers(dest="command")
+    if len(sys.argv) < 2:
+        print("Usage: wiki_sync.py <check|diff|prompt>", file=sys.stderr)
+        sys.exit(2)
 
+    command = sys.argv[1]
     commands = {
         "check": cmd_check,
         "diff": cmd_diff,
         "prompt": cmd_prompt,
     }
-    for name in commands:
-        sub = subparsers.add_parser(name)
-        sub.add_argument(
-            "--from-file",
-            metavar="PATH",
-            help=(
-                "read wikitext from PATH instead of fetching from Wikipedia "
-                "(skips the network call and skips writing sync state)"
-            ),
-        )
 
-    if len(sys.argv) < 2:
-        print("Usage: wiki_sync.py <check|diff|prompt>", file=sys.stderr)
-        sys.exit(2)
-
-    if sys.argv[1] not in commands:
-        print(f"Unknown command: {sys.argv[1]}", file=sys.stderr)
+    if command not in commands:
+        print(f"Unknown command: {command}", file=sys.stderr)
         print(f"Available: {', '.join(commands)}", file=sys.stderr)
         sys.exit(2)
 
-    args = parser.parse_args()
-    commands[args.command](args.from_file)
+    commands[command]()
 
 
 if __name__ == "__main__":

@@ -15,10 +15,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CONTRIB_ROOT = ROOT / ".unslop" / "contrib"
 TODO_MARKER = "TODO:"
-SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")
 
 GATE_COMMANDS = [
-    ["python3", "evals/check.py", "--full"],
+    ["python3", "evals/run_adversarial.py", "--only", "CONTRIB"],
+    ["python3", "evals/run_adversarial.py"],
+    ["python3", "evals/build_shared_benchmark.py", "--check"],
+    ["python3", "evals/check_taboo_parity.py"],
+    ["python3", "evals/check_pattern_coverage.py"],
+    ["python3", "evals/kata_add_pattern.py", "--run"],
 ]
 
 
@@ -112,9 +116,13 @@ def row_fn(slug: str, tell: str, snippet: str) -> dict[str, object]:
     assertion_tell = tell.casefold()
     return {
         "id": f"CONTRIB-FN-{slug}",
-        "target": "script",
         "category": "scanner_false_negative",
+        "title": f"New AI-ism fixture: {tell}",
+        "target": "script",
+        "command": ["python3", "scripts/banned_phrase_scan.py"],
         "stdin": snippet,
+        "failure_mode": "The scanner misses the contributed tell from the exact specimen.",
+        "correct_behavior": "The scanner reports at least one violation containing the contributed tell.",
         "assertions": [
             {"type": "json", "path": "total_violations", "gte": 1},
             {"type": "violation_phrase_contains", "value": assertion_tell},
@@ -127,8 +135,12 @@ def row_fp_template(slug: str, category: str, tell: str) -> dict[str, object]:
         "id": f"CONTRIB-FP-{slug}",
         "category": "scanner_false_positive",
         "protects": category,
+        "title": f"Literal-use protection for {tell}",
         "target": "script",
+        "command": ["python3", "scripts/banned_phrase_scan.py"],
         "stdin": "TODO: add a literal or domain-specific use that should remain clean.",
+        "failure_mode": "A broad pattern could flag legitimate prose.",
+        "correct_behavior": "No violations for the protected literal/domain use.",
         "assertions": [{"type": "json", "path": "total_violations", "equals": 0}],
     }
 
@@ -148,10 +160,6 @@ def render_report(
     if include_rec:
         rows.append("| CONTRIB-REC | REC | existing-word recall still flags |")
     quoted = "\n".join(f"> {line}" if line else ">" for line in snippet.splitlines())
-    pattern_added = manifest.get(
-        "pattern_added",
-        f"TODO: regex or phrase for `{manifest['tell']}`",
-    )
     return (
         f"# Add {manifest['category']} pattern: {shorten(str(manifest['tell']))}\n\n"
         "## The specimen\n\n"
@@ -162,7 +170,7 @@ def render_report(
         "## Why it's an AI-ism\n\n"
         f"{manifest.get('rationale', 'TODO: explain why this phrase is a reusable AI-writing tell in 2-4 sentences.')}\n\n"
         "## Detection\n\n"
-        f"- Pattern added: {pattern_added}\n"
+        f"- Pattern added: {manifest.get('pattern_added', f'TODO: regex or phrase for `{manifest['tell']}`')}\n"
         f"- Severity: {manifest.get('severity', 'TODO: hard or soft')}\n"
         f"- Gating rationale: {manifest.get('gating_rationale', 'TODO: explain literal-use boundary')}\n"
         "- Catalog entry location: references/taboo-phrases.md\n\n"
@@ -195,15 +203,6 @@ def cmd_precheck(args: argparse.Namespace) -> int:
 
 
 def cmd_scaffold(args: argparse.Namespace) -> int:
-    if not SLUG_RE.match(args.pattern_name):
-        print(
-            json.dumps(
-                {
-                    "error": f"invalid pattern name: {args.pattern_name!r}; use lowercase letters, digits, - or _",
-                }
-            )
-        )
-        return 2
     source = Path(args.snippet)
     snippet = read_text(source)
     if args.tell not in snippet:
@@ -239,7 +238,7 @@ def cmd_scaffold(args: argparse.Namespace) -> int:
 
 def run_row(row: dict[str, object]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["python3", "scripts/banned_phrase_scan.py"],
+        row["command"],
         input=str(row.get("stdin", "")),
         capture_output=True,
         text=True,

@@ -5,8 +5,6 @@ Lower composite means more user-like. The composite is half GI-rank penalty and
 half clipped, weighted impostor z-distance using the WP10a research weights.
 """
 
-from __future__ import annotations
-
 import argparse
 import json
 import math
@@ -227,7 +225,7 @@ def parse_args(argv):
 
 def read_candidate(path):
     if path == "-":
-        return sys.stdin.buffer.read().decode("utf-8", errors="replace")
+        return sys.stdin.read()
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(path)
