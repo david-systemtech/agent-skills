@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Scan prose for macro-structure AI-writing patterns."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import math
@@ -16,6 +18,8 @@ from _lang import (  # noqa: E402
     ENGLISH_FUNCTION_WORDS,
     english_function_share,
     is_probably_english,
+    paragraphs as _prose_paragraphs,
+    words,
 )
 from readability_metrics import split_sentences  # noqa: E402
 
@@ -33,6 +37,18 @@ STOPWORDS = {
 CONNECTIVE_OPENERS = re.compile(
     r"^(however|moreover|furthermore|additionally|in addition|overall|"
     r"consequently|nevertheless)\b",
+    re.I,
+)
+# Paragraph-initial "Every <noun> <verb-phrase>" template opener ("Every
+# transformation is scored ...", "Every rewrite passes ..."). As a RHYTHM tell
+# this is about REPETITION, so the metric below fires only at 2+ such paragraph
+# openers; a lone "Every child deserves a good school." stays clean. The verb is
+# a copula/auxiliary or a present/past inflection (-s / -ed) so the second word
+# reads as a predicate, not another noun.
+EVERY_OPENER_RE = re.compile(
+    r"^every\s+[a-z][\w'-]*\s+(?:is|are|was|were|be|been|being|has|have|had|"
+    r"do|does|did|can|will|shall|must|should|would|may|might|"
+    r"[a-z]+(?:s|ed))\b",
     re.I,
 )
 SIGNPOST_RE = re.compile(
@@ -55,26 +71,8 @@ CODA_START_RE = re.compile(
 BOLD_COLON_RE = re.compile(r"^\s*[-*+]?\s*\*\*[^*]{1,40}\*\*\s*:", re.M)
 
 
-def words(text: str) -> list[str]:
-    return re.findall(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)?", text.lower())
-
-
-def strip_markdown_for_prose(text: str) -> str:
-    text = re.sub(r"```[\s\S]*?```", "\n\n", text)
-    kept = []
-    for line in text.splitlines():
-        if re.match(r"\s*>", line) or re.match(r"\s{0,3}#{1,6}\s+", line):
-            kept.append("")
-            continue
-        line = re.sub(r"^\s*[-*+]\s+", "", line)
-        line = re.sub(r"^\s*\d+[.)]\s+", "", line)
-        kept.append(line)
-    return "\n".join(kept)
-
-
 def prose_paragraphs(text: str) -> list[str]:
-    stripped = strip_markdown_for_prose(text)
-    return [re.sub(r"\s+", " ", p).strip() for p in re.split(r"\n\s*\n", stripped) if p.strip()]
+    return _prose_paragraphs(text, blank_blockquotes=True)
 
 
 def cv(values: list[int]) -> float:
@@ -132,6 +130,7 @@ def scan(text: str, genre: str = "prose") -> dict:
         "bold_colon_listicle_count": len(BOLD_COLON_RE.findall(text)),
         "one_line_staccato_share": 0.0,
         "connective_paragraph_openers": 0,
+        "every_template_openers": 0,
         "signpost_density": 0.0,
         "opener_unique_ratio": 0.0,
         "top_opener_share": 0.0,
@@ -206,6 +205,17 @@ def scan(text: str, genre: str = "prose") -> dict:
             ">= 3 paragraphs or > 40% of 8+ paragraphs",
             "Paragraphs repeatedly open with formal transition words.",
             "Replace scaffold openers with specific topic sentences; academic prose may justify some connectors.",
+        ))
+
+    every_openers = sum(1 for p in paragraphs if EVERY_OPENER_RE.search(p))
+    metrics["every_template_openers"] = every_openers
+    if every_openers >= 2:
+        flags.append(flag(
+            "every_template_openers",
+            every_openers,
+            ">= 2 paragraphs opening 'Every <noun> <verb>'",
+            "Paragraphs repeatedly open on the 'Every ___ is/does ...' template.",
+            "Vary the paragraph openings; a repeated Every-template is a machine rhythm tell even when each sentence is fine on its own.",
         ))
 
     if prose_words:
@@ -289,9 +299,9 @@ def main(argv: list[str]) -> int:
         if not path.exists():
             print(f"Missing file: {path}", file=sys.stderr)
             return 2
-        text = path.read_text()
+        text = path.read_text(errors="replace")
     else:
-        text = sys.stdin.read()
+        text = sys.stdin.buffer.read().decode("utf-8", errors="replace")
 
     # English-only graceful decline, matching banned_phrase_scan.py.
     result = scan(text, args.genre)
