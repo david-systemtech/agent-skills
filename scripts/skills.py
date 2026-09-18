@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import fnmatch
+import functools
 import hashlib
 import io
 import json
@@ -70,6 +71,7 @@ def save_manifest(data: dict) -> None:
 # Upstream                                                                    #
 # --------------------------------------------------------------------------- #
 
+@functools.lru_cache(maxsize=None)
 def resolve_ref(repo: str, ref: str) -> str:
     """The commit a branch, tag or HEAD points at right now. A full SHA is itself."""
     if SHA_RE.match(ref):
@@ -138,6 +140,12 @@ def read_tree(blob: bytes) -> dict[str, tuple[bytes, bool]]:
     return files
 
 
+@functools.lru_cache(maxsize=8)
+def tree_at(repo: str, sha: str) -> dict[str, tuple[bytes, bool]]:
+    """The repo's files at one commit, fetched once per run however many skills share it."""
+    return read_tree(download(repo, sha))
+
+
 def skill_dirs(tree: dict[str, tuple[bytes, bool]]) -> list[str]:
     """Every directory holding a SKILL.md, '.' for the repo root."""
     return sorted(
@@ -184,14 +192,21 @@ def frontmatter(text: str) -> dict[str, str]:
     return fields
 
 
-def guess_license(files: dict, tree: dict) -> str:
-    """What SKILL.md declares, else what a LICENSE file reads like, else 'unknown'."""
+def guess_license(files: dict, tree: dict, path: str) -> str:
+    """What SKILL.md declares, else what the nearest LICENSE file reads like -
+    in the skill's own folder, then each folder above it up to the repo root,
+    since a monorepo often keeps one per package - else 'unknown'."""
     declared = frontmatter(files["SKILL.md"][0].decode("utf-8", "replace")).get("license")
     if declared:
         return declared
-    for source in (files, tree):
-        for name, (body, _) in source.items():
-            if "/" in name or not name.upper().startswith(("LICENSE", "LICENCE", "COPYING")):
+    folders = [] if path in (".", "") else list(PurePosixPath(path).parts)
+    for depth in range(len(folders), -1, -1):
+        prefix = "".join(part + "/" for part in folders[:depth])
+        for name, (body, _) in sorted(tree.items()):
+            leaf = name[len(prefix):]
+            if not name.startswith(prefix) or "/" in leaf:
+                continue
+            if not leaf.upper().startswith(("LICENSE", "LICENCE", "COPYING")):
                 continue
             text = body.decode("utf-8", "replace")
             for needle, label in (
@@ -240,7 +255,7 @@ def write_skill(name: str, files: dict[str, tuple[bytes, bool]]) -> None:
 
 def fetch_skill(entry: dict, sha: str, max_mb: int = DEFAULT_MAX_MB) -> tuple[dict, dict]:
     """(this skill's files, the whole upstream tree) at one commit."""
-    tree = read_tree(download(entry["repo"], sha))
+    tree = tree_at(entry["repo"], sha)
     files = select(tree, entry.get("path", "."), entry.get("exclude", []))
     if "SKILL.md" not in files:
         raise Problem(f"{entry['repo']}@{sha[:7]} has no SKILL.md at {entry.get('path', '.')!r}")
@@ -263,7 +278,7 @@ def today() -> str:
 
 def cmd_list(args) -> int:
     sha = resolve_ref(args.repo, args.ref)
-    tree = read_tree(download(args.repo, sha))
+    tree = tree_at(args.repo, sha)
     found = skill_dirs(tree)
     if not found:
         raise Problem(f"{args.repo}@{sha[:7]} holds no SKILL.md")
@@ -283,7 +298,7 @@ def cmd_add(args) -> int:
         raise Problem(f"expected owner/repo, got {args.repo!r}")
     manifest = load_manifest()
     sha = resolve_ref(args.repo, args.ref)
-    tree = read_tree(download(args.repo, sha))
+    tree = tree_at(args.repo, sha)
 
     path = (args.path or "").strip("/") or None
     if path is None:
@@ -320,7 +335,7 @@ def cmd_add(args) -> int:
     write_skill(name, files)
     entry.update(
         sha=sha,
-        license=guess_license(files, tree),
+        license=guess_license(files, tree, path),
         digest=digest_of({key: body for key, (body, _) in files.items()}),
         updated=today(),
     )
@@ -360,7 +375,7 @@ def cmd_update(args) -> int:
                 changes.append((name, entry["repo"], old, sha, False))
                 continue
             write_skill(name, files)
-            entry.update(sha=sha, digest=digest, license=guess_license(files, tree), updated=today())
+            entry.update(sha=sha, digest=digest, license=guess_license(files, tree, entry.get("path", ".")), updated=today())
             changes.append((name, entry["repo"], old, sha, True))
             print(f"  {name}: {old[:7]} -> {sha[:7]}")
         except Problem as problem:
