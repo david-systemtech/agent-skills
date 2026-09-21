@@ -5,7 +5,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/ask-matt",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:66f001d71ca0ee8c0751d3c5d97a8b6d079faa311cfc82c9318fc82edafc7468",
       "updated": "2026-09-18"
@@ -14,7 +14,7 @@
       "repo": "cursor/plugins",
       "path": "pstack/skills/blast-radius",
       "ref": "HEAD",
-      "sha": "e31650eea443aaea1e84cc15d88c13f40080b275",
+      "sha": "6ed0f7a9504f577d7529064103cecce9be7dfc5e",
       "license": "MIT",
       "digest": "sha256:6fd6cd734939395aa7db45164877b29ba0f09521581fe311a52c85735ca1d56a",
       "updated": "2026-09-18"
@@ -23,7 +23,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/claude-handoff",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:af0d19099cb82dde00464e99a36103d47090ac1ae73d4198504f7e215c0e7c6d",
       "updated": "2026-09-18"
@@ -32,7 +32,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/code-review",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:cf2240acbb1cfcfdc11aa68e7a7a46e2eb2351f43feadc5dcec4662bd471fbe5",
       "updated": "2026-09-18"
@@ -41,7 +41,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/codebase-design",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:5722da3e900b06ba698134c6bbb22cf05b0e4aa62b20083abfba1bd8ded06be9",
       "updated": "2026-09-18"
@@ -50,7 +50,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/diagnosing-bugs",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:0a608ef806acf06e874d29d2cfbb5508027ef8170bc05f6b8d9e1ef240b5f879",
       "updated": "2026-09-18"
@@ -59,7 +59,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/domain-modeling",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:fd93b033a18012d9166da813c039750694f14c84bd0ed606298e6fe085210f58",
       "updated": "2026-09-18"
@@ -68,7 +68,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/misc/git-guardrails-claude-code",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:3d64b385e6b4a21db29d74eda5f63a9a36fa05637e23e6b3fdf08f0b6fec19bf",
       "updated": "2026-09-18"
@@ -77,7 +77,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/grill-me",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:eb2880386e9259f4ca51167f518c81cea969850d8f45bd8f79f579dcbbad902e",
       "updated": "2026-09-18"
@@ -86,7 +86,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/grill-with-docs",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:8973c3d9463fc9dd708adc36a0f97b01aab4ae7d6a0217c2aa0f0a7ef206b83c",
       "updated": "2026-09-18"
@@ -95,7 +95,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/grilling",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:6ab7676f85887896c10671e1ab5ac30195c8d036a4d607963407b8b05947f980",
       "updated": "2026-09-18"
@@ -104,7 +104,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/handoff",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:793887bbd3d0a82fb827cc3642dd4c1147d6a20c0551a0c690f9a49be91e8df1",
       "updated": "2026-09-18"
@@ -113,7 +113,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/implement",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:6ccd785bf4cde85cc7bf344960c765d654911c9deac7761d81e811d5a2e8c2dd",
       "updated": "2026-09-18"
@@ -122,7 +122,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/implement-spec",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:55b670e229d0c2e811e1e8af6b14f640534fba31dffc0ee4ebc73b9a833361ea",
       "updated": "2026-09-18"
@@ -131,7 +131,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/improve-codebase-architecture",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:5fa61359af399febd2ccd40bb02c340b7d9181542905a816c43e9e6879e1dad5",
       "updated": "2026-09-18"
@@ -140,7 +140,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/loop-me",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:496c9cfea8f61163b57f1ef0dd086dbe2b948e8b37f563f223b47e1cef7586ad",
       "updated": "2026-09-18"
@@ -149,7 +149,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/misc/migrate-to-shoehorn",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:d63414eee9e6993c7200061c0c6be414c3dd1e9784b48c17268a0895b2d94f1e",
       "updated": "2026-09-18"
@@ -158,16 +158,16 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/pr",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
-      "digest": "sha256:c92866e774e857bc43ad70be78203ece000c68ceede713998db6ec85c30f39b0",
-      "updated": "2026-09-18"
+      "digest": "sha256:72c9abffb8dcdee08834ca90a65d5ac1f809b2fe0dd3232933ebded039c72dd3",
+      "updated": "2026-09-21"
     },
     "prototype": {
       "repo": "mattpocock/skills",
       "path": "skills/engineering/prototype",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:6890ef757ada4b0b571e74c28b69fda697ba2e18f564860f4c9373cbbe50535c",
       "updated": "2026-09-18"
@@ -176,7 +176,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/research",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:f942bb9bdc833ce7d046280a6e1af18932406b122b73299502a968ed87e5d9cb",
       "updated": "2026-09-18"
@@ -185,7 +185,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/resolving-merge-conflicts",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:531c4ec7bab28d0ce58fe32659030551a5b08acdfec682d06dee752d2bf5c72d",
       "updated": "2026-09-18"
@@ -194,7 +194,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/retro",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:4d42bb16dc68325fe941153ff3341f8be8f770121479bc41921d477d27a45ad5",
       "updated": "2026-09-18"
@@ -203,7 +203,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/misc/scaffold-exercises",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:dd0b7adbf3cab45d2c006fd0df6395815085be2d7bebcc21ff0e98db5f6b65d6",
       "updated": "2026-09-18"
@@ -212,7 +212,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/setup-matt-pocock-skills",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:b24ded80f67b626ba05a182655c9e68d19dc1c8443450eda0b14e1438b7bf392",
       "updated": "2026-09-18"
@@ -221,7 +221,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/misc/setup-pre-commit",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:7e42b0f88ae3bc481387c62a5c776f28d6dc1386213d221b09a7308d8eb6d4a7",
       "updated": "2026-09-18"
@@ -230,7 +230,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/setup-ts-deep-modules",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:5e27ee34500d9c24481995de199ff915172ec4e351ede51d2804725ff8caef80",
       "updated": "2026-09-18"
@@ -239,7 +239,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/tdd",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:54e51060ae5a774b3f82d887e5faf881c96c9b07e42047559412338f2a1eecba",
       "updated": "2026-09-18"
@@ -248,7 +248,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/teach",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:af350793f5b810835452c1e71a4c13b622edd471692753a8b944236b9b2edf06",
       "updated": "2026-09-18"
@@ -257,7 +257,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/to-questionnaire",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:4d9f78683ed92ad0dfdbd1ac5275160fb6820325b2d073d4ede297895bd8992a",
       "updated": "2026-09-18"
@@ -266,7 +266,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/to-spec",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:7c0ac5892441627cbe76e8587d47cbe3adedc61f779df5c9f82d473588503330",
       "updated": "2026-09-18"
@@ -275,7 +275,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/to-tickets",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:6af8d89722922203a8cb7346f9a73028f496be8607366c855e2b21c11d3b9ccb",
       "updated": "2026-09-18"
@@ -284,7 +284,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/triage",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:e1854c6caeae305c4f6d81c13d60467fc551a7b39cb2e4be616fba197c328434",
       "updated": "2026-09-18"
@@ -302,7 +302,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/wait-what",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:5b0a66cfc03fed63478700ee3dd73629b2b154a53865166d93cf7bf20dfa185d",
       "updated": "2026-09-18"
@@ -311,7 +311,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/wayfinder",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:f72f9d0f62eb2b38f2a698283f59f6eb9f65fc80a3d38032bf90d686faa5e262",
       "updated": "2026-09-18"
@@ -320,7 +320,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/engineering/wizard",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:273972972f7a9883e6a5f35a69132ec3e73eb6b8cc0076363c20031a0cc92bf4",
       "updated": "2026-09-18"
@@ -329,7 +329,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/writing-beats",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:cb14faf616976da2f26c8076a81d94f405e33da658a0c4147101b2180db41a23",
       "updated": "2026-09-18"
@@ -338,7 +338,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/productivity/writing-for-agents",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:dfc57c19e0f7a7e9c371966d765700d74ecae7694377c095095ee94f6fd216b3",
       "updated": "2026-09-18"
@@ -347,7 +347,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/writing-fragments",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:9ba909999a7abf74b080d4231f61a20fb62d4488f820ae41597b31d610335cf7",
       "updated": "2026-09-18"
@@ -356,7 +356,7 @@
       "repo": "mattpocock/skills",
       "path": "skills/in-progress/writing-shape",
       "ref": "HEAD",
-      "sha": "74ca5fe077456a0b3b2f5310cf9430999fd0b5fd",
+      "sha": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
       "license": "MIT",
       "digest": "sha256:8d29be8485435eb3968e893a4a15d8979fe2a2d6d2f4b7571044707ace6676db",
       "updated": "2026-09-18"
